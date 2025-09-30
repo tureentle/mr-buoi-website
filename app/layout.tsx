@@ -39,7 +39,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`font-sans ${inter.variable} ${jetbrainsMono.variable} antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} themes={["light"]} forcedTheme="light">
           <Suspense fallback={null}>{children}</Suspense>
         </ThemeProvider>
 
