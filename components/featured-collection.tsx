@@ -2,46 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Star, Heart, ArrowRight } from "lucide-react"
-
-const featuredProducts = [
-  {
-    id: 1,
-    name: "Purrfect Day Tee",
-    price: 28,
-    originalPrice: 35,
-    image: "/cute-cat-t-shirt-design-with-paw-prints--soft-peac.jpg",
-    rating: 4.9,
-    reviews: 127,
-    badge: "Best Seller",
-  },
-  {
-    id: 2,
-    name: "Whiskers & Dreams",
-    price: 32,
-    image: "/sleeping-cat-illustration-on-mint-green-t-shirt.jpg",
-    rating: 4.8,
-    reviews: 89,
-    badge: "New",
-  },
-  {
-    id: 3,
-    name: "Cat Mom Life",
-    price: 30,
-    image: "/funny-cat-mom-t-shirt-design--sky-blue-color.jpg",
-    rating: 5.0,
-    reviews: 203,
-    badge: "Fan Favorite",
-  },
-  {
-    id: 4,
-    name: "Paws & Reflect",
-    price: 29,
-    image: "/zen-cat-meditation-t-shirt-design--soft-lavender.jpg",
-    rating: 4.7,
-    reviews: 156,
-    badge: "Limited",
-  },
-]
+import { products, getProductUrl } from "@/lib/products"
 
 export function FeaturedCollection() {
   return (
@@ -55,7 +16,7 @@ export function FeaturedCollection() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {featuredProducts.map((product) => (
+          {products.map((product) => (
             <Card
               key={product.id}
               className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
@@ -102,12 +63,12 @@ export function FeaturedCollection() {
 
                 <Button
                   className="w-full group snipcart-add-item"
-                  data-item-id={`product-${product.id}`}
+                  data-item-id={product.id}
                   data-item-name={product.name}
                   data-item-price={product.price}
-                  data-item-url="/"
+                  data-item-url={getProductUrl(product.slug)}
                   data-item-image={product.image || "/placeholder.svg"}
-                  data-item-description={product.name}
+                  data-item-description={product.description}
                 >
                   Add to Cart
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
