@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
+import Image from "next/image"
 
 export function AboutSection() {
   return (
@@ -6,22 +7,30 @@ export function AboutSection() {
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-balance">Meet Mr. Bưởi: Our Inspiration</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-balance">Meet Mr. Bưởi: Our Story</h2>
             <div className="space-y-4 text-lg text-muted-foreground">
+              <p>We’re Mr. Bưởi, a clothing brand for pet lovers.</p>
               <p>
-                It all started with a little orange cat named Mr. Bưởi, who came into our lives with a broken leg and a
-                heart full of love. Despite his injury, his playful spirit and endless purrs reminded us that even in
-                tough times, there's always room for joy.
+                Our inspiration comes from our own cat, Mr. Bưởi, who once faced a broken leg and the long road to
+                recovery. Caring for him was tough, not just emotionally but financially too. We know firsthand what it’s
+                like to love your pet deeply while struggling to cover the costs of keeping them healthy.
               </p>
               <p>
-                Inspired by his resilience, we created Mr. Bưởi to celebrate the special bond between pets and their
-                humans. Every design tells a story of love, laughter, and the beautiful chaos that comes with being a
-                pet parent.
+                That’s why we started Mr. Bưởi. Our designs, created in a unique and playful art style with plenty of
+                humor, celebrate the bond between pets and their humans. Each piece is a reminder of the joy,
+                resilience, and laughter that animals bring into our lives.
               </p>
+              <div className="space-y-2">
+                <p>But our mission doesn’t stop at design. With every purchase, we give back to:</p>
+                <ul className="list-disc pl-6 space-y-1">
+                  <li>Animal shelters that provide second chances</li>
+                  <li>Low-income veterinary clinics that keep pets healthy</li>
+                  <li>Pet lovers in need who are facing unexpected medical costs</li>
+                </ul>
+              </div>
               <p>
-                But we didn't stop there. We knew that many pets and families face challenges just like Mr. Bưởi did.
-                That's why every purchase helps support animal shelters, provides low-income veterinary care, and
-                assists families with pet-related costs.
+                For us, Mr. Bưởi isn’t just our cat. He’s a symbol of love, resilience, and the belief that every pet
+                deserves care no matter the circumstances.
               </p>
             </div>
           </div>
@@ -29,11 +38,15 @@ export function AboutSection() {
           <div className="relative">
             <Card className="overflow-hidden border-0 shadow-2xl">
               <CardContent className="p-0">
-                <img
-                  src="/heartwarming-photo-of-orange-cat-with-bandaged-leg.jpg"
-                  alt="Mr. Bưởi the cat with his bandaged leg"
-                  className="w-full h-96 object-cover"
-                />
+                <div className="relative w-full h-96">
+                  <Image
+                    src="/Buoi.jpg"
+                    alt="Mr. Bưởi the cat"
+                    fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
                 <div className="p-6 bg-gradient-to-r from-primary/10 to-secondary/10">
                   <p className="text-center font-medium text-foreground">
                     "Every pet deserves love, care, and a second chance at happiness."

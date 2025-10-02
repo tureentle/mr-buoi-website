@@ -16,14 +16,20 @@ export function Footer() {
               Clothes for pet lovers, made with heart. Supporting pets and families in need, one t-shirt at a time.
             </p>
             <div className="flex space-x-3">
-              <Button variant="ghost" size="icon" className="text-background hover:text-foreground hover:bg-background">
-                <Instagram className="h-5 w-5" />
+              <Button asChild variant="ghost" size="icon" className="text-background hover:text-foreground hover:bg-background">
+                <a href="https://instagram.com/mrbuoi" target="_blank" rel="noopener noreferrer" aria-label="Visit Mr. Bưởi on Instagram">
+                  <Instagram className="h-5 w-5" />
+                </a>
               </Button>
-              <Button variant="ghost" size="icon" className="text-background hover:text-foreground hover:bg-background">
-                <Twitter className="h-5 w-5" />
+              <Button asChild variant="ghost" size="icon" className="text-background hover:text-foreground hover:bg-background">
+                <a href="https://twitter.com/mrbuoi" target="_blank" rel="noopener noreferrer" aria-label="Visit Mr. Bưởi on Twitter">
+                  <Twitter className="h-5 w-5" />
+                </a>
               </Button>
-              <Button variant="ghost" size="icon" className="text-background hover:text-foreground hover:bg-background">
-                <Facebook className="h-5 w-5" />
+              <Button asChild variant="ghost" size="icon" className="text-background hover:text-foreground hover:bg-background">
+                <a href="https://facebook.com/mrbuoi" target="_blank" rel="noopener noreferrer" aria-label="Visit Mr. Bưởi on Facebook">
+                  <Facebook className="h-5 w-5" />
+                </a>
               </Button>
             </div>
           </div>
@@ -33,28 +39,8 @@ export function Footer() {
             <h3 className="font-semibold text-lg">Shop</h3>
             <ul className="space-y-2 text-sm text-background/80">
               <li>
-                <a href="#" className="hover:text-background transition-colors">
+                <a href="/products" className="hover:text-background transition-colors">
                   All Products
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-background transition-colors">
-                  T-Shirts
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-background transition-colors">
-                  Hoodies
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-background transition-colors">
-                  Accessories
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-background transition-colors">
-                  Gift Cards
                 </a>
               </li>
             </ul>
@@ -65,18 +51,13 @@ export function Footer() {
             <h3 className="font-semibold text-lg">Support</h3>
             <ul className="space-y-2 text-sm text-background/80">
               <li>
-                <a href="#" className="hover:text-background transition-colors">
+                <a href="/contact" className="hover:text-background transition-colors">
                   Contact Us
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-background transition-colors">
-                  Size Guide
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-background transition-colors">
-                  Shipping Info
+                <a href="/about" className="hover:text-background transition-colors">
+                  About Us
                 </a>
               </li>
               <li>

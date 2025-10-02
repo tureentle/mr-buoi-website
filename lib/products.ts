@@ -5,57 +5,40 @@ export type Product = {
   price: number
   originalPrice?: number
   image: string
-  rating: number
-  reviews: number
+  images?: string[]
+  rating?: number
+  reviews?: number
   badge?: string
   description: string
 }
 
 export const products: Product[] = [
   {
-    id: "product-1",
-    name: "Purrfect Day Tee",
-    slug: "purrfect-day-tee",
-    price: 28,
-    originalPrice: 35,
-    image: "/cute-cat-t-shirt-design-with-paw-prints--soft-peac.jpg",
-    rating: 4.9,
-    reviews: 127,
-    badge: "Best Seller",
-    description: "Soft cotton tee with playful paw prints."
-  },
-  {
-    id: "product-2",
-    name: "Whiskers & Dreams",
-    slug: "whiskers-and-dreams",
-    price: 32,
-    image: "/sleeping-cat-illustration-on-mint-green-t-shirt.jpg",
-    rating: 4.8,
-    reviews: 89,
+    id: "product-5",
+    name: "Mr.Buoi",
+    slug: "mr-buoi",
+    price: 25.9,
+    image: "/mr-buoi.jpg",
+    images: ["/mr-buoi.jpg", "/mr-buoi3.jpg", "/mr-2.jpg"],
+    
     badge: "New",
-    description: "Dreamy mint tee featuring a sleeping cat."
+    description: "Meet Mr. Bưởi — the wide-eyed, curious cat that started it all. This playful tee captures his quirky charm and big personality, perfect for cat lovers who appreciate a little humor with their style."
   },
   {
-    id: "product-3",
-    name: "Cat Mom Life",
-    slug: "cat-mom-life",
-    price: 30,
-    image: "/funny-cat-mom-t-shirt-design--sky-blue-color.jpg",
-    rating: 5.0,
-    reviews: 203,
-    badge: "Fan Favorite",
-    description: "Celebrate cat parenthood in style."
-  },
-  {
-    id: "product-4",
-    name: "Paws & Reflect",
-    slug: "paws-and-reflect",
-    price: 29,
-    image: "/zen-cat-meditation-t-shirt-design--soft-lavender.jpg",
-    rating: 4.7,
-    reviews: 156,
-    badge: "Limited",
-    description: "Zen-inspired lavender tee for calm vibes."
+    id: "product-6",
+    name: "The 9 Lives of Mr. Buoi",
+    slug: "the-9-lives-of-mr-buoi",
+    price: 25.9,
+    image: "/the-9-lives-of-mr-buoi.jpg",
+    images: [
+      "/the-9-lives-of-mr-buoi.jpg",
+      "/the-9-lives-of-mr-buoi2.jpg",
+      "/the-9-lives-of-mr-buoi3.jpg",
+    ],
+    
+    badge: "New",
+    description:
+      "Nine cats, nine personalities, one Mr. Bưởi. This fun design brings his many moods to life — perfect for anyone who knows that every cat has more than one side.",
   }
 ]
 
@@ -66,6 +49,21 @@ export function getProductBySlug(slug: string): Product | undefined {
 export function getProductUrl(slug: string): string {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000"
   return `${baseUrl}/products/${slug}`
+}
+
+
+// Optional local gallery mapping for additional images per local product slug
+export const localProductGalleries: Record<string, string[]> = {
+  "mr-buoi": [
+    "/mr-buoi.jpg",
+    "/mr-buoi3.jpg",
+    "/mr-2.jpg",
+  ],
+  "the-9-lives-of-mr-buoi": [
+    "/the-9-lives-of-mr-buoi.jpg",
+    "/the-9-lives-of-mr-buoi2.jpg",
+    "/the-9-lives-of-mr-buoi3.jpg",
+  ],
 }
 
 

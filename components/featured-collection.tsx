@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Star, Heart, ArrowRight } from "lucide-react"
-import { products, getProductUrl } from "@/lib/products"
+import { fetchSyncProducts, buildProductSlug, fetchSyncProductById } from "@/lib/printful"
 
-export function FeaturedCollection() {
+export async function FeaturedCollection() {
+  const products = await fetchSyncProducts(8)
   return (
     <section id="shop" className="py-20 bg-card">
       <div className="container mx-auto px-4">
@@ -16,18 +19,34 @@ export function FeaturedCollection() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {products.map((product) => (
+          {await Promise.all(products.map(async (product) => {
+            const full = await fetchSyncProductById(product.id)
+            const basePrice = full.variants[0]?.retail_price || "25.00"
+            const sizes = Array.from(new Set(full.variants.flatMap(v => v.name.toLowerCase().match(/\b(xs|s|m|l|xl|2xl|xxl|3xl|4xl)\b/g) || []))).map(s => s.toUpperCase().replace("2xl","2XL").replace("xxl","XXL"))
+            const colors = Array.from(new Set(full.variants.flatMap(v => v.name.toLowerCase().match(/black|white|navy|blue|red|green|pink|purple|gray|grey|heather|yellow|orange|brown|maroon|teal/g) || []))).map(c => c.charAt(0).toUpperCase() + c.slice(1))
+            const sizeOptions = (sizes.join("|") || "S|M|L|XL")
+            const colorOptions = (colors.join("|") || "White|Black")
+            const defaultSize = (sizes[0] || "M")
+            const defaultColor = (colors[0] || "White")
+            const productUrl = `/products/${buildProductSlug(product.id, product.name)}`
+            return (
             <Card
               key={product.id}
               className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
             >
               <div className="relative overflow-hidden">
-                <img
-                  src={product.image || "/placeholder.svg"}
-                  alt={product.name}
-                  className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground">{product.badge}</Badge>
+                <Link href={`/products/${buildProductSlug(product.id, product.name)}`} className="block">
+                  <div className="relative h-80">
+                    <Image
+                      src={product.thumbnail_url || "/placeholder.svg"}
+                      alt={product.name}
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                </Link>
+                {/* Badge omitted when using Printful fields only */}
                 <Button
                   size="icon"
                   variant="secondary"
@@ -39,48 +58,43 @@ export function FeaturedCollection() {
 
               <CardContent className="p-6 space-y-4">
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
-                  <div className="flex items-center space-x-2 mb-3">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-4 w-4 ${i < Math.floor(product.rating) ? "text-yellow-400 fill-current" : "text-gray-300"}`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm text-muted-foreground">
-                      {product.rating} ({product.reviews})
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-primary">${product.price}</span>
-                    {product.originalPrice && (
-                      <span className="text-sm text-muted-foreground line-through">${product.originalPrice}</span>
-                    )}
-                  </div>
+                  <h3 className="font-semibold text-lg mb-1">{product.name}</h3>
+                  <div className="text-sm text-foreground font-medium">${basePrice} USD</div>
                 </div>
 
-                <Button
-                  className="w-full group snipcart-add-item"
-                  data-item-id={product.id}
-                  data-item-name={product.name}
-                  data-item-price={product.price}
-                  data-item-url={getProductUrl(product.slug)}
-                  data-item-image={product.image || "/placeholder.svg"}
-                  data-item-description={product.description}
-                >
-                  Add to Cart
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button asChild variant="outline" className="w-full bg-transparent">
+                    <Link href={productUrl}>
+                      View Details
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </Button>
+                  <button
+                    className="snipcart-add-item inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 cursor-pointer"
+                    data-item-id={`pf-${full.id}`}
+                    data-item-name={full.name}
+                    data-item-price={basePrice}
+                    data-item-url={productUrl}
+                    data-item-image={product.thumbnail_url || "/placeholder.svg"}
+                    data-item-custom1-name="Size"
+                    data-item-custom1-options={sizeOptions}
+                    data-item-custom1-value={defaultSize}
+                    data-item-custom2-name="Color"
+                    data-item-custom2-options={colorOptions}
+                    data-item-custom2-value={defaultColor}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
               </CardContent>
             </Card>
-          ))}
+            )
+          }))}
         </div>
 
         <div className="text-center mt-12">
-          <Button variant="outline" size="lg" className="px-8 bg-transparent">
-            View All Products
+          <Button asChild variant="outline" size="lg" className="px-8 bg-transparent">
+            <Link href="/products">View All Products</Link>
           </Button>
         </div>
       </div>

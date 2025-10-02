@@ -134,6 +134,9 @@
   body {
     @apply bg-background text-foreground font-sans;
   }
+  a:focus-visible, button:focus-visible {
+    @apply ring-2 ring-ring ring-offset-2 ring-offset-background outline-none;
+  }
 }
 
 /* Custom animations for playful interactions */

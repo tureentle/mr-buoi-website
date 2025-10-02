@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import Image from "next/image"
 
 export function HeroSection() {
   return (
@@ -12,18 +14,20 @@ export function HeroSection() {
                 Clothes for Pet Lovers, <span className="text-primary">Made with Heart</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground text-pretty max-w-2xl">
-                Discover cute, humorous, and unique t-shirts featuring original cat-themed designs. Every purchase helps
+                Discover cute, humorous, and unique t-shirts featuring original pet-themed designs. Every purchase helps
                 support pets and families in need.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="text-lg px-8 py-6 group">
-                Shop Now
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              <Button asChild size="lg" className="text-lg px-8 py-6 group">
+                <Link href="#shop">
+                  Shop Now
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
-              <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent">
-                Learn Our Story
+              <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent">
+                <Link href="#about">Learn Our Story</Link>
               </Button>
             </div>
 
@@ -41,11 +45,16 @@ export function HeroSection() {
 
           <div className="relative">
             <div className="relative z-10 animate-float">
-              <img
-                src="/cute-cartoon-cat-wearing-a-t-shirt--playful-and-fr.jpg"
-                alt="Mr. Bưởi mascot cat"
-                className="w-full max-w-md mx-auto hover:animate-wiggle transition-transform cursor-pointer"
-              />
+              <div className="relative w-full max-w-md mx-auto">
+                <Image
+                  src="/mr-buoi3.jpg"
+                  alt="Mr. Bưởi mascot cat"
+                  width={768}
+                  height={768}
+                  className="w-full h-auto hover:animate-wiggle transition-transform cursor-pointer"
+                  priority
+                />
+              </div>
             </div>
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-full blur-3xl scale-75 animate-pulse"></div>
           </div>

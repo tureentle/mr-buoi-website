@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Mail, Gift, Heart, Sparkles } from "lucide-react"
+import Image from "next/image"
 
 export function EmailSignupSection() {
   return (
@@ -60,11 +61,13 @@ export function EmailSignupSection() {
 
               {/* Right side - Visual */}
               <div className="relative bg-gradient-to-br from-primary/20 to-secondary/20 p-8 lg:p-12 flex items-center justify-center">
-                <div className="relative">
-                  <img
+                <div className="relative w-64 h-64">
+                  <Image
                     src="/cute-cartoon-cat-with-envelope-and-hearts--newslet.jpg"
                     alt="Newsletter signup illustration"
-                    className="w-64 h-64 animate-float"
+                    fill
+                    sizes="256px"
+                    className="object-contain animate-float"
                   />
                   <div className="absolute -top-4 -right-4 w-16 h-16 bg-primary/30 rounded-full blur-xl animate-pulse"></div>
                   <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-secondary/30 rounded-full blur-xl animate-pulse delay-1000"></div>
@@ -76,7 +79,6 @@ export function EmailSignupSection() {
 
         {/* Trust indicators */}
         <div className="mt-12 text-center space-y-4">
-          <p className="text-sm text-muted-foreground">Trusted by over 10,000 pet lovers worldwide</p>
           <div className="flex justify-center items-center space-x-8 opacity-60">
             <div className="text-xs font-medium">🔒 Privacy Protected</div>
             <div className="text-xs font-medium">📧 No Spam Promise</div>
