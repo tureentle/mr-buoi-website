@@ -44,7 +44,13 @@ export async function POST(req: NextRequest) {
   }
 
   // Snipcart webhooks may wrap the order as { eventName, content: { ...order } }
+  const eventName: string | undefined = payload?.eventName
   const order: any = payload?.content ?? payload
+
+  // Route only order events; ignore everything else (e.g., customer updates)
+  if (eventName && !/^order\.(completed|paid)$/i.test(eventName)) {
+    return new Response("ignored", { status: 200 })
+  }
 
   try {
     const nameFromBilling = order?.billingAddress?.fullName || order?.billingAddress?.name || ""
@@ -63,7 +69,12 @@ export async function POST(req: NextRequest) {
       phone: order?.shippingAddress?.phone || "",
     }
 
-    const items = await Promise.all((order?.items || []).map(async (item: any) => {
+    const rawItems: any[] = Array.isArray(order?.items) ? order.items : []
+    if (rawItems.length === 0) {
+      return new Response(JSON.stringify({ forwarded: false, reason: "no_items" }), { status: 200 })
+    }
+
+    const items = await Promise.all(rawItems.map(async (item: any) => {
       const custom = extractCustom(item?.customFields || item?.custom || item?.customFieldsJson)
       const size = custom["Size"] || custom["size"]
       const color = custom["Color"] || custom["color"]
@@ -90,15 +101,22 @@ export async function POST(req: NextRequest) {
       }
     }))
 
+    // Filter out items that couldn't resolve to a valid sync variant
+    const resolvableItems = items.filter((it: any) => Boolean(it.sync_variant_id))
+    if (resolvableItems.length === 0) {
+      return new Response(JSON.stringify({ forwarded: false, reason: "no_resolvable_items" }), { status: 200 })
+    }
+
     const body = {
       external_id: order?.token || order?.invoiceNumber || order?.id || undefined,
       recipient,
-      items,
+      items: resolvableItems,
     }
 
     const pf = await createPrintfulOrder(body)
     if (!pf.ok) {
-      return new Response(JSON.stringify({ forwarded: false, printful: pf.json }), { status: 502 })
+      // Do not surface as 5xx to Snipcart to avoid retries; log client error context instead
+      return new Response(JSON.stringify({ forwarded: false, printful: pf.json }), { status: 200 })
     }
 
     return new Response(JSON.stringify({ forwarded: true, printful: pf.json }), { status: 200 })
