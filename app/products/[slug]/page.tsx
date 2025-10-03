@@ -7,19 +7,21 @@ import { ProductPurchaseForm } from "@/components/product-purchase-form"
 import { fetchSyncProductById, parseProductIdFromSlug } from "@/lib/printful"
 import { localProductGalleries } from "@/lib/products"
 
+export const dynamic = 'force-dynamic'
+
 type PageProps = {
   params: { slug: string }
-}
-
-export async function generateStaticParams() {
-  // Optional: skip pre-generation for dynamic printful products or implement
-  return []
 }
 
 export default async function ProductPage({ params }: PageProps) {
   const syncProductId = parseProductIdFromSlug(params.slug)
   if (!syncProductId) return notFound()
-  const product = await fetchSyncProductById(syncProductId)
+  let product
+  try {
+    product = await fetchSyncProductById(syncProductId)
+  } catch {
+    return notFound()
+  }
   const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000") as string
   const productUrl = `${baseUrl}/products/${params.slug}`
   const primaryImage = product.thumbnail_url || "/placeholder.svg"
