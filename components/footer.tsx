@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Instagram, Twitter, Facebook, Mail, MapPin, Phone } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 
 export function Footer() {
   return (
@@ -8,10 +10,10 @@ export function Footer() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="text-2xl">🐱</div>
+            <Link href="/" className="flex items-center space-x-2">
+              <Image src="/logo.png" alt="Mr. Bưởi logo" width={32} height={32} className="h-8 w-auto" />
               <span className="text-xl font-bold">Mr. Bưởi</span>
-            </div>
+            </Link>
             <p className="text-sm text-background/80">
               Clothes for pet lovers, made with heart. Supporting pets and families in need, one t-shirt at a time.
             </p>
@@ -61,8 +63,8 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-background transition-colors">
-                  Returns
+                <a href="/shipping-returns" className="hover:text-background transition-colors">
+                  Shipping & Returns
                 </a>
               </li>
               <li>
@@ -100,13 +102,13 @@ export function Footer() {
               © 2025 Mr. Bưởi. All rights reserved. Made with love for pets everywhere.
             </div>
             <div className="flex space-x-6 text-sm text-background/60">
-              <a href="#" className="hover:text-background transition-colors">
+              <a href="/privacy" className="hover:text-background transition-colors">
                 Privacy Policy
               </a>
-              <a href="#" className="hover:text-background transition-colors">
+              <a href="/terms" className="hover:text-background transition-colors">
                 Terms of Service
               </a>
-              <a href="#" className="hover:text-background transition-colors">
+              <a href="/accessibility" className="hover:text-background transition-colors">
                 Accessibility
               </a>
             </div>

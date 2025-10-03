@@ -36,16 +36,23 @@ function extractCustom(options: any): Record<string, string> {
 export async function POST(req: NextRequest) {
   // Read raw body to allow signature verification if desired
   const raw = await req.text()
-  let order: any
+  let payload: any
   try {
-    order = JSON.parse(raw)
+    payload = JSON.parse(raw)
   } catch (e) {
     return new Response(JSON.stringify({ error: "Invalid JSON" }), { status: 400 })
   }
 
+  // Snipcart webhooks may wrap the order as { eventName, content: { ...order } }
+  const order: any = payload?.content ?? payload
+
   try {
+    const nameFromBilling = order?.billingAddress?.fullName || order?.billingAddress?.name || ""
+    const nameFromUser = order?.user?.billingAddressName || order?.user?.shippingAddressName || ""
+    const mergedName = (nameFromBilling || nameFromUser || `${order?.billingAddress?.firstName || ""} ${order?.billingAddress?.lastName || ""}`).trim()
+
     const recipient = {
-      name: `${order?.billingAddress?.firstName || ""} ${order?.billingAddress?.lastName || ""}`.trim(),
+      name: mergedName || order?.email || "",
       address1: order?.shippingAddress?.address1,
       address2: order?.shippingAddress?.address2 || "",
       city: order?.shippingAddress?.city,
@@ -65,10 +72,20 @@ export async function POST(req: NextRequest) {
       const match = rawId.match(/^(?:pf-)?(\d+)$/)
       const syncProductId = match ? Number(match[1]) : undefined
       const syncVariantId = syncProductId ? await resolveSyncVariantIdByOptions(syncProductId, size, color) : undefined
+
+      // Snipcart may send unitPrice as number or as object with { amount }
+      let retailPrice: string | undefined
+      if (typeof item?.unitPrice === "number") {
+        retailPrice = String(item.unitPrice)
+      } else if (item?.unitPrice && typeof item.unitPrice === "object" && typeof item.unitPrice.amount === "number") {
+        retailPrice = String(item.unitPrice.amount / 100)
+      } else if (typeof item?.price === "number") {
+        retailPrice = String(item.price)
+      }
       return {
         sync_variant_id: syncVariantId ?? undefined,
         quantity: item?.quantity,
-        retail_price: item?.unitPrice ? String(item.unitPrice.amount / 100) : undefined,
+        retail_price: retailPrice,
         name: item?.name,
       }
     }))
