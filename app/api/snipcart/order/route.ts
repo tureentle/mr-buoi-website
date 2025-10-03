@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = {
-      external_id: order?.token || order?.invoiceNumber || order?.id || undefined,
+      external_id: order?.invoiceNumber || order?.token || order?.id || undefined,
       recipient,
       items: resolvableItems,
     }
